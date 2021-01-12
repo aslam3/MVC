@@ -1,0 +1,20 @@
+﻿@model IEnumerable<ProjectShopManagment.ViewModel.UsersRole>
+@{
+    ViewBag.Title = "GetUsersRole";
+}
+
+<h2>GetUsersRole</h2>
+
+<table >
+    <tr>
+        <th>UserName</th>
+        <th>Role Name</th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.UserName</td>
+            <td>@item.RoleName</td>
+        </tr>
+    }
+</table>

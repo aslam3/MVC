@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f17ea4970de843a1bf908306924cd281" Name="Diagram1">
+        <EntityTypeShape EntityType="DbShoppingMallModel.Account" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Expenditure" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Floor" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.ManagerInfo" Width="1.5" PointX="6.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Rent_Details" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Rental_Rechord" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Salary" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Stall" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Stall_Manager" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="DbShoppingMallModel.FK_Stall_Floor" ManuallyRouted="false" />
+        <AssociationConnector Association="DbShoppingMallModel.FK_Stall_Manager_Stall" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DbShoppingMallModel.Employee" Width="1.5" PointX="5.375" PointY="7.75" />
+        <AssociationConnector Association="DbShoppingMallModel.FK_Employee_Salary" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

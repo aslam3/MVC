@@ -1,0 +1,266 @@
+﻿@model ProjectShopManagment.ViewModel.EmployeeVm
+
+@{
+    ViewBag.Title = "Employee Information";
+}
+
+<h2>Emloyee Information</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-bordered" id="tbl">
+            <thead>
+                <tr>
+                    <td>
+                        Name
+                    </td>
+                    <td>Gender</td>
+                    <td>Designation</td>
+                    <td>Join date</td>
+                    @*<td>Photo</td>*@
+                    <td>Edit</td>
+                    <td>Delete</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label id="lblid" hidden></label>
+            <label class="form-inline">Name</label>
+            <input type="text" id="txtName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="form-inline">Gender</label>
+            @*<input type="text" id="txtGender" class="form-control" />*@
+            @Html.EnumDropDownListFor(m=>m.Gender,new {@class= "form-control", @id = "txtGender" })
+        </div>
+        <div class="form-group">
+            <label class="form-inline">Designation</label>
+            @*<input type="text" id="txtDesig" class="form-control" />*@
+            @Html.DropDownList("Desig",null, new {@class= "form-control", @id= "txtDesig" })
+        </div>
+        <div class="form-group">
+            <label class="form-inline">Join Date</label>
+            <input type="text" id="txtClndr" class="form-control date-picker" readonly />
+        </div>
+        @*<div class="form-group">
+                <input type="file" value="browse" id="imgBrowse" onchange="LoadImg(this)"/>
+                <img src="" id="imgShow" height="80" width="80"/>
+            </div>*@
+        <div>
+            <input type="button" id="btnSave" value="Save" />
+            <input type="button" id="btnUpdate" value="Update" hidden />
+        </div>
+
+    </div>
+
+</div>
+@section scripts{
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript">
+        LoadData();
+        function LoadData()
+        {
+            $.ajax(
+                {
+                    url: "/Employees/AllEmployee",
+                    type: "GET",
+                    dataType: "json"
+                }).done(function (d) {
+                    $("#tbl tbody").empty();
+                    $.each(d.data, function (i, v) {
+                        console.log(v.Name);
+                        console.log(v.Join_Date);
+                        console.log(v.Gender);
+                        console.log(v.ID);
+
+                        //var jsonDate = d.Join_Date;
+                        //var value = new Date(parseInt(jsonDate.toString().substr(6)));
+                        //var finalResult = value.getDate() + "/" + value.getMonth() + 1 + "/" + value.getFullYear();
+                        //console.log(finalResult)
+                        $("#tbl tbody").append("<tr><td>" + v.Name + "</td><td>" +
+                            v.Gender + "</td><td>" + v.DesigID +
+                            "</td><td>" +v.Join_Date + "</td><td>" +
+                            "<button class='btn btn-primary' title='Edit' onclick='Edit(" + v.ID + ")'><span class='glyphicon glyphicon-edit'></span></button>" + "</td><td>"
+                            + "<button class='btn btn-danger' title='Delete' onclick='Delete(" + v.ID +")'><span class='glyphicon glyphicon-remove-sign'></span></button>"+"</td></tr>")
+                    })
+                }).fail(function (er) {
+                    console.log(er);
+                });
+
+        }
+
+        $("#btnSave").click(function () {
+            //var file = $("#imgBrowse").get(0).files;
+            //var data = new FormData();
+            //data.append("Imgfile", file[0]);
+            //data.append("Name", $("#txtName").val());
+            //data.append("Gender", $("#txtGender").val());
+            //data.append("Designation", $("#txtDesig").val());
+            //data.append("Join_Date", $("#txtClndr").val());
+
+            obj = {
+                Name: $("#txtName").val(),
+                Gender: $("#txtGender").val(),
+                DesigID: $("#txtDesig").val(),
+                Join_Date: $("#txtClndr").val(),
+                //Imgfile: file[0]
+
+            }
+            console.log(obj)
+            $.ajax({
+                
+                url: "/Employees/Save",
+                type: "POST",
+                dataType: "Json",
+
+                data: obj,
+                //processData:false,
+                ContentType:"application/app"
+
+            }).done(function (data) {
+                ClearAll();
+                LoadData();
+                }).fail(function (err) {
+                    console.log(err.responseText)
+                })
+        })
+
+        function ClearAll() {
+            $("#txtName").val(''),
+                $("#txtGender").val(''),
+                $("#txtDesig").val(''),
+                $("#txtClndr").val(''),
+                $("#imgBrowse").val(''),
+                $("#imgShow").attr("src","")
+
+        }
+        //$("#btnEdit").click(function () {
+        //    $.ajax({
+        //        url: "/Employees/GetById" + id,
+        //        type: "GET",
+        //        dataType: "json"
+        //    }).done(function (d) {
+        //        console.log(d.ID)
+        //        console.log("Name:", d.Name)
+        //        var jsonDate = d.Join_Date;
+        //        var value = new Date(parseInt(jsonDate.toString().substr(6)));
+        //        var finalResult = value.getDate() + "/" + value.getMonth() + 1 + "/" + value.getFullYear();
+        //        $("#txtName").val(d.Name),
+        //            $("#txtGender").val(d.Gender),
+        //            //$("#txtDesig").val(d.DesigID),
+        //            $("#txtClndr").val(finalResult),
+        //            $("#lblid").val(d.ID)
+        //        if (d.ID > 0) {
+        //            btnSave.hidden = true;
+        //            btnUpdate.hidden = false;
+        //        }
+
+        //    }).fail(function (er) {
+        //        console.log("error", er)
+        //    });
+
+
+        //})
+        function Edit(id)
+        {
+
+            $.ajax({
+                url: "/Employees/GetById" + id,
+                type: "GET",
+                dataType: "json"
+            }).done(function (d) {
+                console.log("success")
+                console.log(d.ID)
+                console.log("Name:",d.Name)
+                var jsonDate = d.Join_Date;
+                var value = new Date(parseInt(jsonDate.toString().substr(6)));
+                var finalResult = value.getDate() + "/" + value.getMonth() + 1 + "/" + value.getFullYear();
+                    $("#txtName").val(d.Name),
+                    $("#txtGender").val(d.Gender),
+                    //$("#txtDesig").val(d.DesigID),
+                        $("#txtClndr").val(finalResult),
+                    $("#lblid").val(d.ID)
+                if (d.ID > 0) {
+                    btnSave.hidden = true;
+                    btnUpdate.hidden= false;
+                }
+
+            }).fail(function (er) {
+                console.log("error",er)
+            });
+        }
+        $("#btnUpdate").click(function () {
+
+            var obj = {
+                Name: $("#txtName").val(),
+                Gender: $("#txtGender").val(),
+                DesigID: $("#txtDesig").val(),
+                Join_Date: $("#txtClndr").val(),
+                ID:$("#lblid").val()
+            }
+            console.log(obj)
+            $.ajax({
+                url: "/Employees/Update",
+                type: "POST",
+                dataType: "Json",
+                data: obj,
+                ContentType: "application/json"
+
+            }).done(function (data) {
+                ClearAll();
+                LoadData();
+                btnSave.hidden = false;
+                btnUpdate.hidden = true;
+            }).fail(function (err) {
+                console.log(err.responseText)
+            })
+        })
+        function Delete(id) {
+            $.ajax({
+                url: "/Employees/DeleteEm/" + id,
+                type: "GET",
+                dataType: "json"
+            }).done(function (d) {
+                console.log(d)
+                LoadData();
+            }).fail(function (err) {
+                console.log(err)
+            });
+        }
+        function LoadImg(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                console.log("file:",reader)
+                reader.onload = function (e) {
+                    $("#imgShow").attr("src", e.target.result);
+                    console.log(e.target.result)
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        jQuery(document).ready(function () {
+            //$(".date-picker").each(function () {$(this).datepicker();});
+            $(".date-picker").datepicker(
+                {
+                    dateFormat: "dd/MM/yy",
+                    showOn: "button",
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-60:+10",
+                    buttonText: "<span class='glyphicon glyphicon-calendar'></span> "
+                });
+            $(".date-picker").datepicker("setDate", new Date().getDate());
+        });
+    </script>
+
+
+}
+

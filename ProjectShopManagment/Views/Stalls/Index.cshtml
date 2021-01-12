@@ -1,0 +1,60 @@
+﻿@*@model IEnumerable<ProjectShopManagment.Models.Stall>*@
+@model PagedList.IPagedList<ProjectShopManagment.Models.Stall>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.StallNo)*@
+            Stall No
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.StallName)*@
+            Stall Name
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.StallVolume)*@
+            Volume
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Floor.F_Level)*@
+            Level
+        </th>
+        <th ></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StallNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StallName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StallVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Floor.F_Level)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID },new { @class = "btn btn-primary" }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID },new { @class="btn btn-primary"}) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID },new { @class = "btn btn-danger" })
+            </td>
+            
+        </tr>
+    }
+
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber ) of @Model.PageCount
+@Html.PagedListPager(Model, Page => Url.Action("Index", "Stalls", new { Page}))

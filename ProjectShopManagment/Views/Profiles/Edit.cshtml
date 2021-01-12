@@ -1,0 +1,46 @@
+﻿@model ProjectShopManagment.ViewModel.ProfileVM
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit","Profiles",FormMethod.Post,new { enctype= "multipart/form-data" }))
+{
+    @Html.ValidationSummary(false)
+    <div>
+        @Html.HiddenFor(m => m.UserId)
+        @Html.HiddenFor(m => m.Pass)
+        @Html.HiddenFor(m => m.SecStamp)
+        <label>user name</label>
+        @Html.EditorFor(m => m.UserName)
+    </div>
+    <div>
+        <label>Email</label>
+        @Html.EditorFor(m => m.Email)
+    </div>
+    <div>
+        <label>Fullname</label>
+        @Html.EditorFor(m => m.Fullname)
+    </div>
+    <div>
+        <label>Age</label>
+        @Html.EditorFor(m => m.Age)
+    </div>
+    <div>
+        <label>Addres</label>
+        @Html.EditorFor(m => m.Address)
+    </div>
+    <div>
+        <label>Phone</label>
+        @Html.EditorFor(m => m.Phonenumber)
+    </div>
+    <div>
+        <label>Picture</label>
+        @Html.HiddenFor(m=>m.Picture)
+        <input type="file" id="ImgFile" name="ImgFile" />
+    </div>
+    <div>
+        <input type="submit" value="Update" />
+    </div>
+}

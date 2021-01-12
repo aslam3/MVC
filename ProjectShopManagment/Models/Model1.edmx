@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DbShoppingMallModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stall_Id" Type="int" />
+          <Property Name="Total_Rent" Type="money" />
+          <Property Name="Total_Recive" Type="money" />
+          <Property Name="Total_Due" Type="money" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" />
+          <Property Name="DesigID" Type="int" />
+          <Property Name="Join_Date" Type="date" />
+          <Property Name="Picture" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Expenditure">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Expend_Sector" Type="varchar" MaxLength="50" />
+          <Property Name="Total_Amount" Type="money" />
+        </EntityType>
+        <EntityType Name="Floor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="F_Level" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="ManagerInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagerName" Type="varchar" MaxLength="150" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="M_Stall" Type="int" />
+          <Property Name="Image" Type="image" />
+        </EntityType>
+        <EntityType Name="Rent_Details">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RentalSector" Type="varchar" MaxLength="50" />
+          <Property Name="Rent" Type="money" />
+        </EntityType>
+        <EntityType Name="Rental_Rechord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stall_Id" Type="int" />
+          <Property Name="Stall_Rent" Type="money" />
+          <Property Name="Electricity_bill" Type="money" />
+          <Property Name="Rent_Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Salary">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Designation" Type="varchar" MaxLength="50" />
+          <Property Name="Salary" Type="money" />
+          <Property Name="Medical" Type="money" />
+          <Property Name="HouseRent" Type="money" />
+        </EntityType>
+        <EntityType Name="Stall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StallNo" Type="int" />
+          <Property Name="StallName" Type="varchar" MaxLength="50" />
+          <Property Name="StallVolume" Type="int" />
+          <Property Name="S_Floor" Type="int" />
+        </EntityType>
+        <EntityType Name="Stall_Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagerName" Type="varchar" MaxLength="30" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="M_Stall" Type="int" />
+          <Property Name="Image" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <Association Name="FK_Employee_Salary">
+          <End Role="Salary" Type="Self.Salary" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Salary">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DesigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stall_Floor">
+          <End Role="Floor" Type="Self.Floor" Multiplicity="0..1" />
+          <End Role="Stall" Type="Self.Stall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floor">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stall">
+              <PropertyRef Name="S_Floor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stall_Manager_Stall">
+          <End Role="Stall" Type="Self.Stall" Multiplicity="0..1" />
+          <End Role="Stall_Manager" Type="Self.Stall_Manager" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stall_Manager">
+              <PropertyRef Name="M_Stall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Sp_Manager" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="msid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_StallDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sid" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="DbShoppingMallModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Expenditure" EntityType="Self.Expenditure" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Floor" EntityType="Self.Floor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagerInfo" EntityType="Self.ManagerInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rent_Details" EntityType="Self.Rent_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rental_Rechord" EntityType="Self.Rental_Rechord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Salary" EntityType="Self.Salary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stall" EntityType="Self.Stall" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stall_Manager" EntityType="Self.Stall_Manager" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_Salary" Association="Self.FK_Employee_Salary">
+            <End Role="Salary" EntitySet="Salary" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stall_Floor" Association="Self.FK_Stall_Floor">
+            <End Role="Floor" EntitySet="Floor" />
+            <End Role="Stall" EntitySet="Stall" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stall_Manager_Stall" Association="Self.FK_Stall_Manager_Stall">
+            <End Role="Stall" EntitySet="Stall" />
+            <End Role="Stall_Manager" EntitySet="Stall_Manager" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DbShoppingMallModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stall_Id" Type="Int32" />
+          <Property Name="Total_Rent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Total_Recive" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Total_Due" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Expenditure">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Expend_Sector" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Total_Amount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Floor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="F_Level" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Stalls" Relationship="Self.FK_Stall_Floor" FromRole="Floor" ToRole="Stall" />
+        </EntityType>
+        <EntityType Name="ManagerInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManagerName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="M_Stall" Type="Int32" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Rent_Details">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RentalSector" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rent" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Rental_Rechord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stall_Id" Type="Int32" />
+          <Property Name="Stall_Rent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Electricity_bill" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Rent_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Salary">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salary1" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Medical" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="HouseRent" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Employees" Relationship="DbShoppingMallModel.FK_Employee_Salary" FromRole="Salary" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Stall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StallNo" Type="Int32" />
+          <Property Name="StallName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StallVolume" Type="Int32" />
+          <Property Name="S_Floor" Type="Int32" />
+          <NavigationProperty Name="Floor" Relationship="Self.FK_Stall_Floor" FromRole="Stall" ToRole="Floor" />
+          <NavigationProperty Name="Stall_Manager" Relationship="Self.FK_Stall_Manager_Stall" FromRole="Stall" ToRole="Stall_Manager" />
+        </EntityType>
+        <EntityType Name="Stall_Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManagerName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="M_Stall" Type="Int32" />
+          <Property Name="Image" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Stall" Relationship="Self.FK_Stall_Manager_Stall" FromRole="Stall_Manager" ToRole="Stall" />
+        </EntityType>
+        <Association Name="FK_Stall_Floor">
+          <End Role="Floor" Type="Self.Floor" Multiplicity="0..1" />
+          <End Role="Stall" Type="Self.Stall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floor">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stall">
+              <PropertyRef Name="S_Floor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stall_Manager_Stall">
+          <End Role="Stall" Type="Self.Stall" Multiplicity="0..1" />
+          <End Role="Stall_Manager" Type="Self.Stall_Manager" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stall_Manager">
+              <PropertyRef Name="M_Stall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DbShoppingMallEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Expenditures" EntityType="Self.Expenditure" />
+          <EntitySet Name="Floors" EntityType="Self.Floor" />
+          <EntitySet Name="ManagerInfoes" EntityType="Self.ManagerInfo" />
+          <EntitySet Name="Rent_Details" EntityType="Self.Rent_Details" />
+          <EntitySet Name="Rental_Rechord" EntityType="Self.Rental_Rechord" />
+          <EntitySet Name="Salaries" EntityType="Self.Salary" />
+          <EntitySet Name="Stalls" EntityType="Self.Stall" />
+          <EntitySet Name="Stall_Manager" EntityType="Self.Stall_Manager" />
+          <AssociationSet Name="FK_Stall_Floor" Association="Self.FK_Stall_Floor">
+            <End Role="Floor" EntitySet="Floors" />
+            <End Role="Stall" EntitySet="Stalls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stall_Manager_Stall" Association="Self.FK_Stall_Manager_Stall">
+            <End Role="Stall" EntitySet="Stalls" />
+            <End Role="Stall_Manager" EntitySet="Stall_Manager" />
+          </AssociationSet>
+          <FunctionImport Name="Sp_Manager" ReturnType="Collection(DbShoppingMallModel.Sp_Manager_Result)">
+          <Parameter Name="msid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_StallDetails" ReturnType="Collection(DbShoppingMallModel.Sp_StallDetails_Result)">
+          <Parameter Name="sid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Employees" EntityType="DbShoppingMallModel.Employee" />
+          <AssociationSet Name="FK_Employee_Salary" Association="DbShoppingMallModel.FK_Employee_Salary">
+            <End Role="Salary" EntitySet="Salaries" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="Sp_Manager_Result">
+          <Property Type="String" Name="StallName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="F_Level" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="Total_Rent" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Total_Recive" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Total_Due" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="Sp_StallDetails_Result">
+          <Property Type="String" Name="StallName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="F_Level" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DesigID" Type="Int32" />
+          <Property Name="Join_Date" Type="DateTime" Precision="0" />
+          <Property Name="Picture" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Salary" Relationship="DbShoppingMallModel.FK_Employee_Salary" FromRole="Employee" ToRole="Salary" />
+        </EntityType>
+        <Association Name="FK_Employee_Salary">
+          <End Type="DbShoppingMallModel.Salary" Role="Salary" Multiplicity="0..1" />
+          <End Type="DbShoppingMallModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Salary">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DesigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DbShoppingMallModelStoreContainer" CdmEntityContainer="DbShoppingMallEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Account">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Stall_Id" ColumnName="Stall_Id" />
+                <ScalarProperty Name="Total_Rent" ColumnName="Total_Rent" />
+                <ScalarProperty Name="Total_Recive" ColumnName="Total_Recive" />
+                <ScalarProperty Name="Total_Due" ColumnName="Total_Due" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expenditures">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Expenditure">
+              <MappingFragment StoreEntitySet="Expenditure">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Expend_Sector" ColumnName="Expend_Sector" />
+                <ScalarProperty Name="Total_Amount" ColumnName="Total_Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Floors">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Floor">
+              <MappingFragment StoreEntitySet="Floor">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="F_Level" ColumnName="F_Level" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ManagerInfoes">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.ManagerInfo">
+              <MappingFragment StoreEntitySet="ManagerInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="M_Stall" ColumnName="M_Stall" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rent_Details">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Rent_Details">
+              <MappingFragment StoreEntitySet="Rent_Details">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RentalSector" ColumnName="RentalSector" />
+                <ScalarProperty Name="Rent" ColumnName="Rent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rental_Rechord">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Rental_Rechord">
+              <MappingFragment StoreEntitySet="Rental_Rechord">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Stall_Id" ColumnName="Stall_Id" />
+                <ScalarProperty Name="Stall_Rent" ColumnName="Stall_Rent" />
+                <ScalarProperty Name="Electricity_bill" ColumnName="Electricity_bill" />
+                <ScalarProperty Name="Rent_Date" ColumnName="Rent_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Salaries">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Salary">
+              <MappingFragment StoreEntitySet="Salary">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Salary1" ColumnName="Salary" />
+                <ScalarProperty Name="Medical" ColumnName="Medical" />
+                <ScalarProperty Name="HouseRent" ColumnName="HouseRent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stalls">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Stall">
+              <MappingFragment StoreEntitySet="Stall">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StallNo" ColumnName="StallNo" />
+                <ScalarProperty Name="StallName" ColumnName="StallName" />
+                <ScalarProperty Name="StallVolume" ColumnName="StallVolume" />
+                <ScalarProperty Name="S_Floor" ColumnName="S_Floor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stall_Manager">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Stall_Manager">
+              <MappingFragment StoreEntitySet="Stall_Manager">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="M_Stall" ColumnName="M_Stall" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Manager" FunctionName="DbShoppingMallModel.Store.Sp_Manager">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DbShoppingMallModel.Sp_Manager_Result">
+                <ScalarProperty Name="StallName" ColumnName="StallName" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="F_Level" ColumnName="F_Level" />
+                <ScalarProperty Name="Total_Rent" ColumnName="Total_Rent" />
+                <ScalarProperty Name="Total_Recive" ColumnName="Total_Recive" />
+                <ScalarProperty Name="Total_Due" ColumnName="Total_Due" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_StallDetails" FunctionName="DbShoppingMallModel.Store.Sp_StallDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DbShoppingMallModel.Sp_StallDetails_Result">
+                <ScalarProperty Name="StallName" ColumnName="StallName" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="F_Level" ColumnName="F_Level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="DbShoppingMallModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="Join_Date" ColumnName="Join_Date" />
+                <ScalarProperty Name="DesigID" ColumnName="DesigID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
